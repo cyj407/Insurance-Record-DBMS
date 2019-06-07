@@ -50,7 +50,7 @@ namespace InsuranceDB
         public void update(String type, DateTime date, long price, long cost, String payment, long id)
         {
             String query = string.Format(
-                "UPDATE WARRANTY SET 保險種類='{0}', 保險到期日='{1}', 保額='{2}', 保費='{3}', 付款方式='{4}' WHERE IID='{5}'",
+                "UPDATE WARRANTY SET 保險種類='{0}', 保險到期日='{1}', 保額='{2}', 保費='{3}', 付款方式='{4}' WHERE WID='{5}'",
              type, date.ToString("yyyy-MM-dd"), price, cost, payment, id);
 
             MySqlCommand cmd = new MySqlCommand(query, MainWindow.connection);
@@ -63,7 +63,7 @@ namespace InsuranceDB
 
         public void delete(long id)
         {
-            String query = string.Format("DELETE FROM WARRANTY WHERE IID={0}", id);
+            String query = string.Format("DELETE FROM WARRANTY WHERE WID={0}", id);
 
             MySqlCommand cmd = new MySqlCommand(query, MainWindow.connection);
             MainWindow.connection.Open();
