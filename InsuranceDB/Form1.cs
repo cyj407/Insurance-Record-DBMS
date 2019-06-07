@@ -32,9 +32,7 @@ namespace InsuranceDB
         // save the key from all attribute
         private long curOwner_id = -1, curWarrant_id = -1, curFee_id = -1;
         private String curLicen, curDealer;
-
-        //private String strEnti, strAttri, strCond;
-
+        
         private String curTable;
         
         private bool canUpdate = false;
@@ -419,6 +417,12 @@ namespace InsuranceDB
             loadAllData(query);
         }
 
+        private void btnComplex_Click(object sender, EventArgs e)
+        {
+            ComplexQuery cq = new ComplexQuery(transfer);
+            cq.Show();
+        }
+
         private void btnEnter_Click(object sender, EventArgs e)
         {
             String query = rtQueryInput.Text;
@@ -506,210 +510,6 @@ namespace InsuranceDB
             tbFeeFuel.Text = (getValue("燃料費") == "") ? tbFeeFuel.Text : getValue("燃料費");
             tbTaxLic.Text = (getValue("牌照稅") == "") ? tbTaxLic.Text : getValue("牌照稅");
         }
-
-        /*
-        private void btnBasicSearch_Click(object sender, EventArgs e)
-        {
-            String query;
-            String entity = "";
-            String condition = "";
-            int checkedEntityNum = 0;
-            strAttri = "";
-
-            // get attributes (put it after SELECT)
-            IEnumerable<CheckBox> attriSet = groupBox6.Controls.OfType<CheckBox>();
-            bool firstAttri = true;
-            foreach(CheckBox cb in attriSet)
-            {
-                if(cb.Enabled && cb.Checked)
-                {
-                    if(cb.Text == "*")
-                    {
-                        strAttri = "*";
-                        break;
-                    }
-                    if(firstAttri)
-                    {
-                        strAttri = cb.Text;
-                        firstAttri = false;
-                    }
-                    else
-                    {
-                        strAttri += ", " + cb.Text;
-                    }
-                }
-            }
-
-            // get entities (put it after FROM)
-            IEnumerable<CheckBox> entiSet = groupBox5.Controls.OfType<CheckBox>();
-            bool firstEnti = true;
-            foreach(CheckBox cb in entiSet)
-            {
-                if(cb.Checked)
-                {
-                    ++checkedEntityNum;
-                    if(firstEnti)
-                    {
-                        entity = getQueryEntity(cb.Text);
-                        firstEnti = false;
-                    }
-                    else
-                    {
-                        entity += ", " + getQueryEntity(cb.Text);
-                    }
-                }
-            }
-
-            // add relationship table
-            bool firstCond = true;
-            if(cbOwner.Checked && cbVehicle.Checked)
-            {
-                condition += " WHERE Owner.OID = Vehicle.OwnerID";
-                firstCond = false;
-
-                if(cbInsurance.Checked)
-                {
-                    entity += ", " + "relation_ins";
-                    condition += " AND " + "Owner.OID = relation_ins.OwnID";
-                    condition += " AND " + "vehicle.車牌號碼 = relation_ins.License";
-                    condition += " AND " + "insurance.IID = relation_ins.InsID";
-                }
-                if(cbTax.Checked)
-                {
-                    entity += ", " + "relation_tax";
-                    condition += " AND " + "Owner.OID = relation_tax.OwnID";
-                    condition += " AND " + "vehicle.車牌號碼 = relation_tax.License";
-                    condition += " AND " + "tax.TaxID = relation_tax.TaxID";
-                }
-            }
-            if(cbInsurance.Checked && cbPayment.Checked)
-            {
-                if(firstCond)
-                {
-                    condition += " WHERE insurance.IID = payment.InsuranceID";
-                    firstCond = false;
-                }
-                else
-                {
-                    condition += " AND " + "insurance.IID = payment.InsuranceID";
-                }
-            }
-
-            // get conditions
-            if(dgvConstraint.RowCount > 1)
-            {
-                Console.WriteLine(dgvConstraint);
-                for(int i = 0; i < dgvConstraint.Rows.Count - 1; ++i)
-                {
-                    String cond = dgvConstraint.Rows[i].Cells[0].Value.ToString();
-                    cond += dgvConstraint.Rows[i].Cells[1].Value.ToString();
-                    cond += "'" + dgvConstraint.Rows[i].Cells[2].Value.ToString() + "'";
-                    if(firstCond)
-                    {
-                        condition = " WHERE " + cond;
-                        firstCond = false;
-                        continue;
-                    }
-
-                    condition +=  " AND " + cond;
-                }
-            }
-
-            query = "SELECT " + strAttri + " FROM " + entity + condition;
-            Console.WriteLine(query);
-
-            loadAllData(query);
-
-        }
-
-        private void btnComplex_Click(object sender, EventArgs e)
-        {
-            strAttri = strEnti = strCond = "";
-            // get attributes (put it after SELECT)
-            IEnumerable<CheckBox> attriSet = groupBox6.Controls.OfType<CheckBox>();
-            bool firstAttri = true;
-            foreach (CheckBox cb in attriSet)
-            {
-                if (cb.Enabled && cb.Checked)
-                {
-                    if (cb.Text == "*")
-                    {
-                        strAttri = "*";
-                        break;
-                    }
-                    if (firstAttri)
-                    {
-                        strAttri = cb.Text;
-                        firstAttri = false;
-                    }
-                    else
-                    {
-                        strAttri += ", " + cb.Text;
-                    }
-                }
-            }
-            
-            // get entities (put it after FROM)
-            int checkedEntityNum = 0;
-            IEnumerable<CheckBox> entiSet = groupBox5.Controls.OfType<CheckBox>();
-            bool firstEnti = true;
-            foreach(CheckBox cb in entiSet)
-            {
-                if(cb.Checked)
-                {
-                    ++checkedEntityNum;
-                    if(firstEnti)
-                    {
-                        strEnti = getQueryEntity(cb.Text);
-                        firstEnti = false;
-                    }
-                    else
-                    {
-                        strEnti += ", " + getQueryEntity(cb.Text);
-                    }
-                }
-            }
-
-            // add relationship table
-            bool firstCond = true;
-            if(cbOwner.Checked && cbVehicle.Checked)
-            {
-                strCond += "Owner.OID = Vehicle.OwnerID";
-                firstCond = false;
-
-                if(cbInsurance.Checked)
-                {
-                    strEnti += ", " + "relation_ins";
-                    strCond += " AND " + "Owner.OID = relation_ins.OwnID";
-                    strCond += " AND " + "vehicle.車牌號碼 = relation_ins.License";
-                    strCond += " AND " + "insurance.IID = relation_ins.InsID";
-                }
-                if(cbTax.Checked)
-                {
-                    strEnti += ", " + "relation_tax";
-                    strCond += " AND " + "Owner.OID = relation_tax.OwnID";
-                    strCond += " AND " + "vehicle.車牌號碼 = relation_tax.License";
-                    strCond += " AND " + "tax.TaxID = relation_tax.TaxID";
-                }
-            }
-            if(cbInsurance.Checked && cbPayment.Checked)
-            {
-                if(firstCond)
-                {
-                    strCond += " WHERE insurance.IID = payment.InsuranceID";
-                    firstCond = false;
-                }
-                else
-                {
-                    strCond += " AND " + "insurance.IID = payment.InsuranceID";
-                }
-            }
-            
-            ComplexQuery cq = new ComplexQuery(transfer, strAttri, strEnti, strCond);
-            cq.Show();
-        }
-        */
-
 
     }
 }

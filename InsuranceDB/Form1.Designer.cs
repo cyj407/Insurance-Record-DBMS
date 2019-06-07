@@ -609,6 +609,7 @@
             this.btnComplex.TabIndex = 31;
             this.btnComplex.Text = "進階";
             this.btnComplex.UseVisualStyleBackColor = true;
+            this.btnComplex.Click += new System.EventHandler(this.btnComplex_Click);
             // 
             // btnDelete
             // 
