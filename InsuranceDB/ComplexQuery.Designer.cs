@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.btnEnter = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tbInput = new System.Windows.Forms.TextBox();
             this.rbMin = new System.Windows.Forms.RadioButton();
             this.rbSum = new System.Windows.Forms.RadioButton();
             this.rbMax = new System.Windows.Forms.RadioButton();
@@ -38,21 +36,25 @@
             this.rbCnt = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lbText = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cbAttri = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.cbHavAttri = new System.Windows.Forms.ComboBox();
+            this.cbGroup = new System.Windows.Forms.ComboBox();
+            this.cbGroupBy = new System.Windows.Forms.CheckBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbOp = new System.Windows.Forms.ComboBox();
+            this.tbVal = new System.Windows.Forms.TextBox();
             this.cbHaving = new System.Windows.Forms.CheckBox();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnEnter
             // 
-            this.btnEnter.Location = new System.Drawing.Point(423, 300);
+            this.btnEnter.Location = new System.Drawing.Point(423, 280);
             this.btnEnter.Margin = new System.Windows.Forms.Padding(4);
             this.btnEnter.Name = "btnEnter";
             this.btnEnter.Size = new System.Drawing.Size(112, 34);
@@ -60,24 +62,6 @@
             this.btnEnter.Text = "確定";
             this.btnEnter.UseVisualStyleBackColor = true;
             this.btnEnter.Click += new System.EventHandler(this.btnEnter_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.tbInput);
-            this.groupBox1.Location = new System.Drawing.Point(33, 200);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(508, 85);
-            this.groupBox1.TabIndex = 56;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "目前輸入";
-            // 
-            // tbInput
-            // 
-            this.tbInput.Enabled = false;
-            this.tbInput.Location = new System.Drawing.Point(87, 32);
-            this.tbInput.Name = "tbInput";
-            this.tbInput.Size = new System.Drawing.Size(323, 29);
-            this.tbInput.TabIndex = 0;
             // 
             // rbMin
             // 
@@ -155,7 +139,7 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.lbText);
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Controls.Add(this.cbAttri);
             this.groupBox3.Location = new System.Drawing.Point(203, 12);
@@ -165,13 +149,13 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "第二步";
             // 
-            // label2
+            // lbText
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(246, 36);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(0, 18);
-            this.label2.TabIndex = 2;
+            this.lbText.AutoSize = true;
+            this.lbText.Location = new System.Drawing.Point(246, 38);
+            this.lbText.Name = "lbText";
+            this.lbText.Size = new System.Drawing.Size(0, 18);
+            this.lbText.TabIndex = 2;
             // 
             // label1
             // 
@@ -188,13 +172,13 @@
             this.cbAttri.FormattingEnabled = true;
             this.cbAttri.Location = new System.Drawing.Point(82, 33);
             this.cbAttri.Name = "cbAttri";
-            this.cbAttri.Size = new System.Drawing.Size(158, 26);
+            this.cbAttri.Size = new System.Drawing.Size(147, 26);
             this.cbAttri.TabIndex = 0;
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.cbHavAttri);
-            this.groupBox4.Controls.Add(this.cbHaving);
+            this.groupBox4.Controls.Add(this.cbGroup);
+            this.groupBox4.Controls.Add(this.cbGroupBy);
             this.groupBox4.Location = new System.Drawing.Point(203, 104);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(338, 83);
@@ -202,35 +186,82 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "第三步";
             // 
-            // cbHavAttri
+            // cbGroup
             // 
-            this.cbHavAttri.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbHavAttri.FormattingEnabled = true;
-            this.cbHavAttri.Location = new System.Drawing.Point(142, 36);
-            this.cbHavAttri.Name = "cbHavAttri";
-            this.cbHavAttri.Size = new System.Drawing.Size(157, 26);
-            this.cbHavAttri.TabIndex = 1;
+            this.cbGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbGroup.FormattingEnabled = true;
+            this.cbGroup.Location = new System.Drawing.Point(142, 36);
+            this.cbGroup.Name = "cbGroup";
+            this.cbGroup.Size = new System.Drawing.Size(157, 26);
+            this.cbGroup.TabIndex = 1;
+            // 
+            // cbGroupBy
+            // 
+            this.cbGroupBy.AutoSize = true;
+            this.cbGroupBy.Location = new System.Drawing.Point(16, 40);
+            this.cbGroupBy.Name = "cbGroupBy";
+            this.cbGroupBy.Size = new System.Drawing.Size(124, 22);
+            this.cbGroupBy.TabIndex = 0;
+            this.cbGroupBy.Text = "分堆根據：";
+            this.cbGroupBy.UseVisualStyleBackColor = true;
+            this.cbGroupBy.CheckedChanged += new System.EventHandler(this.cbGroupBy_CheckedChanged);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.cbHaving);
+            this.groupBox5.Controls.Add(this.tbVal);
+            this.groupBox5.Controls.Add(this.cbOp);
+            this.groupBox5.Location = new System.Drawing.Point(33, 193);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(508, 76);
+            this.groupBox5.TabIndex = 66;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "第四步";
+            // 
+            // cbOp
+            // 
+            this.cbOp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbOp.FormattingEnabled = true;
+            this.cbOp.Items.AddRange(new object[] {
+            "=",
+            ">",
+            "<",
+            "!=",
+            ">=",
+            "<="});
+            this.cbOp.Location = new System.Drawing.Point(298, 31);
+            this.cbOp.Name = "cbOp";
+            this.cbOp.Size = new System.Drawing.Size(82, 26);
+            this.cbOp.TabIndex = 2;
+            // 
+            // tbVal
+            // 
+            this.tbVal.Location = new System.Drawing.Point(390, 31);
+            this.tbVal.Name = "tbVal";
+            this.tbVal.Size = new System.Drawing.Size(78, 29);
+            this.tbVal.TabIndex = 1;
             // 
             // cbHaving
             // 
             this.cbHaving.AutoSize = true;
-            this.cbHaving.Location = new System.Drawing.Point(16, 40);
+            this.cbHaving.Location = new System.Drawing.Point(42, 35);
             this.cbHaving.Name = "cbHaving";
-            this.cbHaving.Size = new System.Drawing.Size(124, 22);
-            this.cbHaving.TabIndex = 0;
-            this.cbHaving.Text = "分堆根據：";
+            this.cbHaving.Size = new System.Drawing.Size(250, 22);
+            this.cbHaving.TabIndex = 2;
+            this.cbHaving.Text = "計算個數的限制條件：結果";
             this.cbHaving.UseVisualStyleBackColor = true;
+            this.cbHaving.CheckedChanged += new System.EventHandler(this.cbHaving_CheckedChanged);
             // 
             // ComplexQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(562, 351);
+            this.ClientSize = new System.Drawing.Size(562, 331);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnEnter);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -238,21 +269,20 @@
             this.Text = "ComplexQuery";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.ComplexQuery_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.Button btnEnter;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton rbMin;
         private System.Windows.Forms.RadioButton rbSum;
         private System.Windows.Forms.RadioButton rbMax;
@@ -260,12 +290,15 @@
         private System.Windows.Forms.RadioButton rbCnt;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lbText;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbAttri;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.ComboBox cbHavAttri;
+        private System.Windows.Forms.ComboBox cbGroup;
+        private System.Windows.Forms.CheckBox cbGroupBy;
+        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.CheckBox cbHaving;
-        private System.Windows.Forms.TextBox tbInput;
+        private System.Windows.Forms.TextBox tbVal;
+        private System.Windows.Forms.ComboBox cbOp;
     }
 }
