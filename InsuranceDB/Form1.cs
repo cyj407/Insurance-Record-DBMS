@@ -43,7 +43,6 @@ namespace InsuranceDB
             // init GUI element
             InitializeComponent();
             transfer += new DataTransfer(ReceiveQuery);
-
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             
@@ -63,7 +62,8 @@ namespace InsuranceDB
             cbEntity.SelectedIndex = 6;
             dtDate.MinDate = DateTime.Today;
             dtDate.Value = DateTime.Today;
-            cbQuery.SelectedIndex = 0;
+            cbQuery.SelectedIndex = 5;
+            cbMonth.SelectedIndex = 12;
         }
         
         private void loadAllData(String query)
@@ -80,11 +80,9 @@ namespace InsuranceDB
             }
 
             Console.WriteLine(query);
-            
+
             MySqlCommand cmd = new MySqlCommand(query, connection);
-
             connection.Open();
-
             DataTable dt = new DataTable();
             MySqlDataAdapter da = new MySqlDataAdapter(cmd);
             da.Fill(dt);
@@ -92,29 +90,28 @@ namespace InsuranceDB
             bs.DataSource = dt;
             dataGridView1.DataSource = bs;
             
-            if(dataGridView1.Columns["經銷商"] != null)
+            if(dataGridView1.Columns["經銷商"] != null && dataGridView1.Columns["車行"] != null)
             {
                 dataGridView1.Columns["經銷商"].Visible = false;
             }
-            if (dataGridView1.Columns["FeeID"] != null)
+            if (dataGridView1.Columns["FeeID"] != null && dataGridView1.Columns["FID"] != null)
             {
-                dataGridView1.Columns["FeeID"].Visible = false;
+                dataGridView1.Columns["FID"].Visible = false;
             }
-            if (dataGridView1.Columns["OwnerID"] != null)
+            if (dataGridView1.Columns["OwnerID"] != null && dataGridView1.Columns["OID"] != null)
             {
-                dataGridView1.Columns["OwnerID"].Visible = false;
+                dataGridView1.Columns["OID"].Visible = false;
             }
-            if (dataGridView1.Columns["License"] != null)
+            if (dataGridView1.Columns["License"] != null && dataGridView1.Columns["車牌號碼"] != null)
             {
                 dataGridView1.Columns["License"].Visible = false;
             }
-            if (dataGridView1.Columns["WarrantyID"] != null)
+            if (dataGridView1.Columns["WarrantyID"] != null && dataGridView1.Columns["WID"] != null)
             {
-                dataGridView1.Columns["WarrantyID"].Visible = false;
+                dataGridView1.Columns["WID"].Visible = false;
             }
 
             da.Update(dt);
-
             connection.Close();
         }
 
@@ -242,8 +239,6 @@ namespace InsuranceDB
             long fuel_fee = long.Parse(tbFeeFuel.Text);
             long lic_tax = long.Parse(tbTaxLic.Text);
 
-            Console.WriteLine("before insert");
-
             // insert to all entity and relationship // fee no needs to add
             _owner.insert(owner_n, owner_g, owner_a);
             _vehicle.insert(vehicle_t, vehicle_l, vehicle_b, dealer_n, curFee_id);
@@ -285,6 +280,7 @@ namespace InsuranceDB
         private void btnSubData_Click(object sender, EventArgs e)
         {
             String entity = getQueryEntity(cbEntity.SelectedItem.ToString());
+            Console.WriteLine(entity);
             String query = (entity == "") ? "" : ("SELECT * FROM " + entity);
             loadAllData(query);
 
@@ -378,6 +374,29 @@ namespace InsuranceDB
         private void btnSearch_Click(object sender, EventArgs e)
         {
             String query = "";
+            if(cbMonth.SelectedItem.ToString() == "-" && cbQuery.SelectedItem.ToString() == "-")
+            {
+                MessageBox.Show("請選取一個下拉選單中的選項", "WARNING");
+                return;
+            }
+
+            // Check the month query first
+            if(cbMonth.SelectedItem.ToString() != "-")
+            {
+                String year = DateTime.Now.Year.ToString();
+                String month = cbMonth.SelectedItem.ToString();
+                DateTime firstDay = DateTime.Parse(year + "-" + month + "-1");
+                DateTime lastDay = firstDay.AddMonths(1).AddDays(-1);
+
+                query = "SELECT * FROM OWNER, VEHICLE, WARRANTY, FEE, DEALER, INSURE ";
+                query += " WHERE OWNER.OID = INSURE.OwnerID AND ";
+                query += " VEHICLE.車牌號碼 = INSURE.License AND ";
+                query += "VEHICLE.FeeID = FEE.FID AND ";
+                query += " DEALER.車行 = VEHICLE.經銷商 AND ";
+                query += " WARRANTY.WID = INSURE.WarrantyID AND ";
+                query += string.Format(" WARRANTY.保險到期日 between '{0}' AND '{1}'", firstDay, lastDay);
+            }
+
             switch(cbQuery.SelectedIndex)
             {
                 case(0):
@@ -413,6 +432,9 @@ namespace InsuranceDB
                     query += " WHERE VEHICLE.FeeID NOT IN ( SELECT FEE.FID FROM FEE ";
                     query += " WHERE FEE.牌照稅=0 ) ";
                     break;
+
+                default:        // "-" -> search month
+                    break;
             }
             loadAllData(query);
         }
@@ -421,6 +443,16 @@ namespace InsuranceDB
         {
             ComplexQuery cq = new ComplexQuery(transfer);
             cq.Show();
+        }
+
+        private void cbMonth_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cbQuery.SelectedIndex = 5;
+        }
+
+        private void cbQuery_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            cbMonth.SelectedIndex = 12;
         }
 
         private void btnEnter_Click(object sender, EventArgs e)

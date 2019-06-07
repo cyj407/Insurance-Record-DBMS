@@ -72,7 +72,6 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.rbCreditCard = new System.Windows.Forms.RadioButton();
             this.rbCash = new System.Windows.Forms.RadioButton();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btnEnter = new System.Windows.Forms.Button();
             this.rtQueryInput = new System.Windows.Forms.RichTextBox();
@@ -84,6 +83,9 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.cbQuery = new System.Windows.Forms.ComboBox();
             this.btnSearch = new System.Windows.Forms.Button();
+            this.cbMonth = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -225,7 +227,6 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(297, 11);
             this.tabControl1.Name = "tabControl1";
@@ -560,15 +561,6 @@
             this.rbCash.Text = "現金";
             this.rbCash.UseVisualStyleBackColor = true;
             // 
-            // tabPage4
-            // 
-            this.tabPage4.Location = new System.Drawing.Point(4, 28);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(846, 204);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "按鈕搜尋";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.btnEnter);
@@ -663,11 +655,14 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.cbMonth);
             this.groupBox5.Controls.Add(this.cbQuery);
             this.groupBox5.Controls.Add(this.btnSearch);
+            this.groupBox5.Controls.Add(this.label17);
+            this.groupBox5.Controls.Add(this.label18);
             this.groupBox5.Location = new System.Drawing.Point(14, 95);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(274, 104);
+            this.groupBox5.Size = new System.Drawing.Size(274, 148);
             this.groupBox5.TabIndex = 37;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "篩選查詢";
@@ -681,15 +676,17 @@
             "所有沒賣出車的經銷商",
             "所有只要繳燃料費的車輛資料",
             "所有機車的牌照稅資料",
-            "所有要繳牌照稅的車輛資料"});
-            this.cbQuery.Location = new System.Drawing.Point(15, 26);
+            "所有要繳牌照稅的車輛資料",
+            "-"});
+            this.cbQuery.Location = new System.Drawing.Point(14, 30);
             this.cbQuery.Name = "cbQuery";
             this.cbQuery.Size = new System.Drawing.Size(246, 26);
             this.cbQuery.TabIndex = 35;
+            this.cbQuery.SelectedIndexChanged += new System.EventHandler(this.cbQuery_SelectedIndexChanged);
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(181, 60);
+            this.btnSearch.Location = new System.Drawing.Point(181, 104);
             this.btnSearch.Margin = new System.Windows.Forms.Padding(4);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(80, 34);
@@ -697,6 +694,50 @@
             this.btnSearch.Text = "搜尋";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            // 
+            // cbMonth
+            // 
+            this.cbMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMonth.FormattingEnabled = true;
+            this.cbMonth.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "-"});
+            this.cbMonth.Location = new System.Drawing.Point(51, 69);
+            this.cbMonth.Name = "cbMonth";
+            this.cbMonth.Size = new System.Drawing.Size(46, 26);
+            this.cbMonth.TabIndex = 36;
+            this.cbMonth.SelectedIndexChanged += new System.EventHandler(this.cbMonth_SelectedIndexChanged);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(8, 74);
+            this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(44, 18);
+            this.label17.TabIndex = 35;
+            this.label17.Text = "查詢";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(97, 74);
+            this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(170, 18);
+            this.label18.TabIndex = 37;
+            this.label18.Text = "月份到期的所有資料";
             // 
             // MainWindow
             // 
@@ -733,6 +774,7 @@
             this.tabPage2.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -781,7 +823,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Button btnComplex;
         private System.Windows.Forms.TextBox tbPhone;
         private System.Windows.Forms.Label label16;
@@ -795,6 +836,9 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.ComboBox cbQuery;
         private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ComboBox cbMonth;
     }
 }
 
