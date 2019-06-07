@@ -82,8 +82,8 @@
             this.cbEntity = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.btnNested = new System.Windows.Forms.Button();
+            this.cbQuery = new System.Windows.Forms.ComboBox();
+            this.btnSearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -662,8 +662,8 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.comboBox1);
-            this.groupBox5.Controls.Add(this.btnNested);
+            this.groupBox5.Controls.Add(this.cbQuery);
+            this.groupBox5.Controls.Add(this.btnSearch);
             this.groupBox5.Location = new System.Drawing.Point(14, 95);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(274, 104);
@@ -671,32 +671,31 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "篩選查詢";
             // 
-            // comboBox1
+            // cbQuery
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "所有車行(經銷商)賣出的車輛",
-            "所有沒賣出車的車行(經銷商)",
-            "所有重型機車的完整資料",
-            "所有輕型機車的完整資料",
-            "所有汽車的完整資料",
-            "所有只要繳牌照稅的車輛資料",
-            "所有機車的牌照稅資料"});
-            this.comboBox1.Location = new System.Drawing.Point(15, 26);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(246, 26);
-            this.comboBox1.TabIndex = 35;
+            this.cbQuery.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbQuery.FormattingEnabled = true;
+            this.cbQuery.Items.AddRange(new object[] {
+            "所有保單資料(不含經銷商)",
+            "所有沒賣出車的經銷商",
+            "所有只要繳燃料費的車輛資料",
+            "所有機車的牌照稅資料",
+            "所有要繳牌照稅的車輛資料"});
+            this.cbQuery.Location = new System.Drawing.Point(15, 26);
+            this.cbQuery.Name = "cbQuery";
+            this.cbQuery.Size = new System.Drawing.Size(246, 26);
+            this.cbQuery.TabIndex = 35;
             // 
-            // btnNested
+            // btnSearch
             // 
-            this.btnNested.Location = new System.Drawing.Point(181, 60);
-            this.btnNested.Margin = new System.Windows.Forms.Padding(4);
-            this.btnNested.Name = "btnNested";
-            this.btnNested.Size = new System.Drawing.Size(80, 34);
-            this.btnNested.TabIndex = 34;
-            this.btnNested.Text = "搜尋";
-            this.btnNested.UseVisualStyleBackColor = true;
+            this.btnSearch.Location = new System.Drawing.Point(181, 60);
+            this.btnSearch.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(80, 34);
+            this.btnSearch.TabIndex = 34;
+            this.btnSearch.Text = "搜尋";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // MainWindow
             // 
@@ -793,8 +792,8 @@
         private System.Windows.Forms.ComboBox cbEntity;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button btnNested;
+        private System.Windows.Forms.ComboBox cbQuery;
+        private System.Windows.Forms.Button btnSearch;
     }
 }
 

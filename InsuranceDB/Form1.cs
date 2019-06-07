@@ -65,6 +65,7 @@ namespace InsuranceDB
             cbEntity.SelectedIndex = 6;
             dtDate.MinDate = DateTime.Today;
             dtDate.Value = DateTime.Today;
+            cbQuery.SelectedIndex = 0;
         }
         
         private void loadAllData(String query)
@@ -376,6 +377,136 @@ namespace InsuranceDB
             canDelete = false;
         }
 
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            String query = "";
+            switch(cbQuery.SelectedIndex)
+            {
+                case(0):
+                    query += " SELECT OWNER.*, WARRANTY.*, FEE.*,";
+                    query += " VEHICLE.車牌號碼, VEHICLE.車種, VEHICLE.廠牌";
+                    query += " FROM OWNER, WARRANTY, VEHICLE, FEE, INSURE";
+                    query += " WHERE OWNER.OID = INSURE.OwnerID";
+                    query += " AND WARRANTY.WID = INSURE.WarrantyID";
+                    query += " AND VEHICLE.車牌號碼 = INSURE.License";
+                    query += " AND FEE.FID = VEHICLE.FeeID";
+                    break;
+
+                case(1):
+                    query += " SELECT * FROM DEALER";
+                    query += " WHERE NOT EXISTS ( SELECT * FROM VEHICLE WHERE ";
+                    query += " VEHICLE.經銷商 = DEALER.車行 )";
+                    break;
+
+                case(2):
+                    query += " SELECT * FROM VEHICLE";
+                    query += " WHERE EXISTS ( SELECT * FROM FEE WHERE ";
+                    query += " FEE.FID = VEHICLE.FeeID AND FEE.燃料費 )";
+                    break;
+
+                case(3):
+                    query += " SELECT FEE.牌照稅 FROM FEE ";
+                    query += " WHERE FEE.FID IN ( SELECT VEHICLE.FeeID FROM VEHICLE ";
+                    query += " WHERE VEHICLE.車種 = '重型機車' OR VEHICLE.車種 = '輕型機車' )";
+                    break;
+
+                case(4):
+                    query += " SELECT * FROM VEHICLE ";
+                    query += " WHERE VEHICLE.FeeID NOT IN ( SELECT FEE.FID FROM FEE ";
+                    query += " WHERE FEE.牌照稅=0 ) ";
+                    break;
+            }
+            loadAllData(query);
+        }
+
+        private void btnEnter_Click(object sender, EventArgs e)
+        {
+            String query = rtQueryInput.Text;
+            loadAllData(query);
+        }
+
+        private String getValue(String key)
+        {
+            if(dataGridView1.Columns[key] !=null)
+            {
+                return dataGridView1.SelectedRows[0].Cells[key].Value.ToString();
+            }
+            return "";
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e) 
+        {
+
+            if(curTable == "FEE" && dataGridView1.ColumnCount == 3 && canUpdate)
+            {
+                curFee_id = (getValue("FID") == "") ? curFee_id : long.Parse(getValue("FID"));        
+                tbFeeFuel.Text = (getValue("燃料費") == "") ? tbFeeFuel.Text : getValue("燃料費");
+                tbTaxLic.Text = (getValue("牌照稅") == "") ? tbTaxLic.Text : getValue("牌照稅");
+                return;
+            }
+            if(curTable == "DEALER" && dataGridView1.ColumnCount == 3 && canUpdate)
+            {
+                curDealer = (getValue("車行") == "") ? curDealer : getValue("車行");
+                tbDealer.Text = (getValue("車行")=="") ? tbDealer.Text : getValue("車行");
+                tbDealerAddr.Text = (getValue("車行地址") == "") ? tbDealerAddr.Text : getValue("車行地址");
+                tbPhone.Text = (getValue("電話") == "") ? tbPhone.Text : getValue("電話");
+                return;
+            }
+
+            // check show the "全部資料" table
+            if(curTable == "" && getValue("OID") != "" && getValue("車牌號碼") != "" &&
+             getValue("車行") != "" && getValue("WID") != "" && getValue("FID") != "")
+            {
+                Console.WriteLine("CURRENT TABLE : " + curTable);
+                canUpdate = true;
+            }
+            else {
+                canUpdate = false;
+            }
+
+            // save the invisible data (ex: OwnerID, InsuranceID... )
+            curOwner_id = (getValue("OID") == "") ? curOwner_id : long.Parse(getValue("OID"));
+            curLicen = (getValue("車牌號碼") == "") ? curLicen : getValue("車牌號碼");
+            curDealer = (getValue("車行") == "") ? curDealer : getValue("車行");
+            curWarrant_id = (getValue("WID") == "") ? curWarrant_id : long.Parse(getValue("WID"));
+            curFee_id = (getValue("FID") == "") ? curFee_id : long.Parse(getValue("FID"));
+            Console.WriteLine("current fee id : " +curFee_id);
+
+            // save the visible data and put in the input frame
+            tbName.Text = (getValue("姓名") == "") ? tbName.Text : getValue("姓名");
+            if(getValue("性別") != "")
+            {
+                rbMale.Checked = (getValue("性別") == "男") ? true : false;
+                rbFemale.Checked = (getValue("性別") == "女") ? true : false;
+            }
+            tbAddress.Text = (getValue("地址") == "") ? tbAddress.Text : getValue("地址");
+
+            cbVehicleType.SelectedItem = (getValue("車種") == "") ? cbVehicleType.SelectedItem : getValue("車種");
+            tbLicense.Text = (getValue("車牌號碼") == "") ? tbLicense.Text : getValue("車牌號碼"); ;
+            tbBrand.Text = (getValue("廠牌") == "") ? tbBrand.Text : getValue("廠牌");
+
+            tbDealer.Text = (getValue("車行")=="") ? tbDealer.Text : getValue("車行");
+            tbDealerAddr.Text = (getValue("車行地址") == "") ? tbDealerAddr.Text : getValue("車行地址");
+            tbPhone.Text = (getValue("電話") == "") ? tbPhone.Text : getValue("電話");
+
+            if(getValue("保險種類") != "")
+            {
+                rbFree.Checked = (getValue("保險種類") == "任意險") ? true : false;
+                rbForce.Checked = (getValue("保險種類") == "強制險") ? true : false;
+            }
+            dtDate.Value = (getValue("保險到期日") == "") ? dtDate.Value : DateTime.Parse(getValue("保險到期日"));
+            tbPrice.Text = (getValue("保額") == "") ? tbPrice.Text : getValue("保額");
+            tbCost.Text = (getValue("保費") == "") ? tbCost.Text : getValue("保費");
+            if(getValue("付款方式") != "")
+            {
+                rbCreditCard.Checked = (getValue("付款方式") == "刷卡") ? true : false;
+                rbCash.Checked = (getValue("付款方式") == "現金") ? true : false;
+            }
+
+            tbFeeFuel.Text = (getValue("燃料費") == "") ? tbFeeFuel.Text : getValue("燃料費");
+            tbTaxLic.Text = (getValue("牌照稅") == "") ? tbTaxLic.Text : getValue("牌照稅");
+        }
+
         /*
         private void btnBasicSearch_Click(object sender, EventArgs e)
         {
@@ -579,93 +710,6 @@ namespace InsuranceDB
         }
         */
 
-        private void btnEnter_Click(object sender, EventArgs e)
-        {
-            String query = rtQueryInput.Text;
-            loadAllData(query);
-        }
-
-        private String getValue(String key)
-        {
-            if(dataGridView1.Columns[key] !=null)
-            {
-                return dataGridView1.SelectedRows[0].Cells[key].Value.ToString();
-            }
-            return "";
-        }
-
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e) 
-        {
-
-            if(curTable == "FEE" && dataGridView1.ColumnCount == 3 && canUpdate)
-            {
-                curFee_id = (getValue("FID") == "") ? curFee_id : long.Parse(getValue("FID"));        
-                tbFeeFuel.Text = (getValue("燃料費") == "") ? tbFeeFuel.Text : getValue("燃料費");
-                tbTaxLic.Text = (getValue("牌照稅") == "") ? tbTaxLic.Text : getValue("牌照稅");
-                return;
-            }
-            if(curTable == "DEALER" && dataGridView1.ColumnCount == 3 && canUpdate)
-            {
-                curDealer = (getValue("車行") == "") ? curDealer : getValue("車行");
-                tbDealer.Text = (getValue("車行")=="") ? tbDealer.Text : getValue("車行");
-                tbDealerAddr.Text = (getValue("車行地址") == "") ? tbDealerAddr.Text : getValue("車行地址");
-                tbPhone.Text = (getValue("電話") == "") ? tbPhone.Text : getValue("電話");
-                return;
-            }
-
-            // check show the "全部資料" table
-            if(curTable == "" && getValue("OID") != "" && getValue("車牌號碼") != "" &&
-             getValue("車行") != "" && getValue("WID") != "" && getValue("FID") != "")
-            {
-                Console.WriteLine("CURRENT TABLE : " + curTable);
-                canUpdate = true;
-            }
-            else {
-                canUpdate = false;
-            }
-
-            // save the invisible data (ex: OwnerID, InsuranceID... )
-            curOwner_id = (getValue("OID") == "") ? curOwner_id : long.Parse(getValue("OID"));
-            curLicen = (getValue("車牌號碼") == "") ? curLicen : getValue("車牌號碼");
-            curDealer = (getValue("車行") == "") ? curDealer : getValue("車行");
-            curWarrant_id = (getValue("WID") == "") ? curWarrant_id : long.Parse(getValue("WID"));
-            curFee_id = (getValue("FID") == "") ? curFee_id : long.Parse(getValue("FID"));
-            Console.WriteLine("current fee id : " +curFee_id);
-
-            // save the visible data and put in the input frame
-            tbName.Text = (getValue("姓名") == "") ? tbName.Text : getValue("姓名");
-            if(getValue("性別") != "")
-            {
-                rbMale.Checked = (getValue("性別") == "男") ? true : false;
-                rbFemale.Checked = (getValue("性別") == "女") ? true : false;
-            }
-            tbAddress.Text = (getValue("地址") == "") ? tbAddress.Text : getValue("地址");
-
-            cbVehicleType.SelectedItem = (getValue("車種") == "") ? cbVehicleType.SelectedItem : getValue("車種");
-            tbLicense.Text = (getValue("車牌號碼") == "") ? tbLicense.Text : getValue("車牌號碼"); ;
-            tbBrand.Text = (getValue("廠牌") == "") ? tbBrand.Text : getValue("廠牌");
-
-            tbDealer.Text = (getValue("車行")=="") ? tbDealer.Text : getValue("車行");
-            tbDealerAddr.Text = (getValue("車行地址") == "") ? tbDealerAddr.Text : getValue("車行地址");
-            tbPhone.Text = (getValue("電話") == "") ? tbPhone.Text : getValue("電話");
-
-            if(getValue("保險種類") != "")
-            {
-                rbFree.Checked = (getValue("保險種類") == "任意險") ? true : false;
-                rbForce.Checked = (getValue("保險種類") == "強制險") ? true : false;
-            }
-            dtDate.Value = (getValue("保險到期日") == "") ? dtDate.Value : DateTime.Parse(getValue("保險到期日"));
-            tbPrice.Text = (getValue("保額") == "") ? tbPrice.Text : getValue("保額");
-            tbCost.Text = (getValue("保費") == "") ? tbCost.Text : getValue("保費");
-            if(getValue("付款方式") != "")
-            {
-                rbCreditCard.Checked = (getValue("付款方式") == "刷卡") ? true : false;
-                rbCash.Checked = (getValue("付款方式") == "現金") ? true : false;
-            }
-
-            tbFeeFuel.Text = (getValue("燃料費") == "") ? tbFeeFuel.Text : getValue("燃料費");
-            tbTaxLic.Text = (getValue("牌照稅") == "") ? tbTaxLic.Text : getValue("牌照稅");
-        }
 
     }
 }
