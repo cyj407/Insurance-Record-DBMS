@@ -1,0 +1,16 @@
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\bin\Debug\InsuranceDB.exe.config
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\bin\Debug\InsuranceDB.exe
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\bin\Debug\InsuranceDB.pdb
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\bin\Debug\MySql.Data.dll
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\bin\Debug\Google.Protobuf.dll
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\bin\Debug\BouncyCastle.Crypto.dll
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\bin\Debug\MySql.Data.xml
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.csprojAssemblyReference.cache
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.Properties.Resources.resources
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.csproj.GenerateResource.cache
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.csproj.CoreCompileInputs.cache
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.csproj.CopyComplete
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.exe
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.pdb
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.MainWindow.resources
+D:\Desktop\academic\DBMS\InsuranceDB\InsuranceDB\obj\Debug\InsuranceDB.ComplexQuery.resources
