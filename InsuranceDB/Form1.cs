@@ -33,10 +33,12 @@ namespace InsuranceDB
         private long curOwner_id = -1, curWarrant_id = -1, curFee_id = -1;
         private String curLicen, curDealer;
 
-        private String strEnti, strAttri, strCond;
+        //private String strEnti, strAttri, strCond;
 
         private String curTable;
+        
         private bool canUpdate = false;
+        private bool canDelete = false;
 
         public MainWindow()
         {
@@ -64,8 +66,7 @@ namespace InsuranceDB
             dtDate.MinDate = DateTime.Today;
             dtDate.Value = DateTime.Today;
         }
-
-        //--------
+        
         private void loadAllData(String query)
         {
             // show the updated data
@@ -92,60 +93,31 @@ namespace InsuranceDB
             bs.DataSource = dt;
             dataGridView1.DataSource = bs;
             
-            // if(dataGridView1.Columns["OwnerID"] != null)
-            // {
-            //     dataGridView1.Columns["OwnerID"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["OwnerID1"] != null)
-            // {
-            //     dataGridView1.Columns["OwnerID1"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["OwnID"] != null)
-            // {
-            //     dataGridView1.Columns["OwnID"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["OwnID1"] != null)
-            // {
-            //     dataGridView1.Columns["OwnID1"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["License"] != null)
-            // {
-            //     dataGridView1.Columns["License"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["License1"] != null)
-            // {
-            //     dataGridView1.Columns["License1"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["InsuranceID"] != null)
-            // {
-            //     dataGridView1.Columns["InsuranceID"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["InsuranceID1"] != null)
-            // {
-            //     dataGridView1.Columns["InsuranceID1"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["InsID"] != null)
-            // {
-            //     dataGridView1.Columns["InsID"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["FeeID"] != null)
-            // {
-            //     dataGridView1.Columns["FeeID"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["FeeID1"] != null)
-            // {
-            //     dataGridView1.Columns["FeeID1"].Visible = false;
-            // }
-            // if (dataGridView1.Columns["PaymentID"] != null)
-            // {
-            //     dataGridView1.Columns["PaymentID"].Visible = false;
-            // }
+            if(dataGridView1.Columns["經銷商"] != null)
+            {
+                dataGridView1.Columns["經銷商"].Visible = false;
+            }
+            if (dataGridView1.Columns["FeeID"] != null)
+            {
+                dataGridView1.Columns["FeeID"].Visible = false;
+            }
+            if (dataGridView1.Columns["OwnerID"] != null)
+            {
+                dataGridView1.Columns["OwnerID"].Visible = false;
+            }
+            if (dataGridView1.Columns["License"] != null)
+            {
+                dataGridView1.Columns["License"].Visible = false;
+            }
+            if (dataGridView1.Columns["WarrantyID"] != null)
+            {
+                dataGridView1.Columns["WarrantyID"].Visible = false;
+            }
 
             da.Update(dt);
 
             connection.Close();
         }
-        //--------
 
         private bool completeData() 
         {
@@ -318,6 +290,16 @@ namespace InsuranceDB
             loadAllData(query);
 
             curTable = entity;
+            if(curTable == "")
+            {
+                canDelete = true;
+            }
+        }
+
+        private void btnClearInput_Click(object sender, EventArgs e)
+        {
+            clearInput();
+            canUpdate = false;
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -366,37 +348,33 @@ namespace InsuranceDB
             canUpdate = false;
         }
 
-        private void btnBasicSearch_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        //-------
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow data in dataGridView1.SelectedRows)
+            if(!canDelete)
             {
-
-                curOwner_id = long.Parse(data.Cells["OID"].Value.ToString());
-                curLicen = data.Cells["車牌號碼"].Value.ToString();
-                curWarrant_id = long.Parse(data.Cells["IID"].Value.ToString());
-                //curFee_id = long.Parse(data.Cells["FID"].Value.ToString());
-
-                // delete data
-                // vehicle will be deleted from owner, payment will be deleted from insurance
-                //  _owner.delete(curOwner_id);
-                // _insurance.delete(curWarrant_id);
-                //  _tax.delete(curTax_id);
-
+                MessageBox.Show("無法進行刪除！", "WARNING"); 
+                MessageBox.Show(
+                    "請先選擇左方「檢視資料表」的「全部資料」後按「顯示」。\n再從下方的資料中選取要刪除的資料後點擊刪除。"
+                    ,"WARNING");
+                return;
             }
 
-            // after delete, reset the owner id
-            curOwner_id = -1;
+            foreach (DataGridViewRow data in dataGridView1.SelectedRows)
+            {
+                curOwner_id = long.Parse(data.Cells["OID"].Value.ToString());
+                curLicen = data.Cells["車牌號碼"].Value.ToString();
+                curWarrant_id = long.Parse(data.Cells["WID"].Value.ToString());
+
+                // delete data
+                _owner.delete(curOwner_id);
+                _vehicle.delete(curLicen);
+                _warranty.delete(curWarrant_id);
+            }
 
             // show the updated data
             loadAllData("");
+            canDelete = false;
         }
-        //-------
 
         /*
         private void btnBasicSearch_Click(object sender, EventArgs e)
@@ -635,9 +613,11 @@ namespace InsuranceDB
                 return;
             }
 
-            if(getValue("OID") != "" && getValue("車牌號碼") != "" &&
+            // check show the "全部資料" table
+            if(curTable == "" && getValue("OID") != "" && getValue("車牌號碼") != "" &&
              getValue("車行") != "" && getValue("WID") != "" && getValue("FID") != "")
             {
+                Console.WriteLine("CURRENT TABLE : " + curTable);
                 canUpdate = true;
             }
             else {

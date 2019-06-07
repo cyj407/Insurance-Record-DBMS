@@ -32,7 +32,7 @@
             this.btnInsert = new System.Windows.Forms.Button();
             this.tbName = new System.Windows.Forms.TextBox();
             this.btnUpdate = new System.Windows.Forms.Button();
-            this.btnBasicSearch = new System.Windows.Forms.Button();
+            this.btnClearInput = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -81,6 +81,9 @@
             this.btnSubData = new System.Windows.Forms.Button();
             this.cbEntity = new System.Windows.Forms.ComboBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.btnNested = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -89,6 +92,7 @@
             this.groupBox3.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -103,7 +107,7 @@
             // 
             // btnInsert
             // 
-            this.btnInsert.Location = new System.Drawing.Point(1158, 37);
+            this.btnInsert.Location = new System.Drawing.Point(1158, 79);
             this.btnInsert.Margin = new System.Windows.Forms.Padding(4);
             this.btnInsert.Name = "btnInsert";
             this.btnInsert.Size = new System.Drawing.Size(112, 34);
@@ -122,7 +126,7 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(1158, 80);
+            this.btnUpdate.Location = new System.Drawing.Point(1158, 122);
             this.btnUpdate.Margin = new System.Windows.Forms.Padding(4);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(112, 34);
@@ -131,16 +135,16 @@
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
-            // btnBasicSearch
+            // btnClearInput
             // 
-            this.btnBasicSearch.Location = new System.Drawing.Point(1158, 166);
-            this.btnBasicSearch.Margin = new System.Windows.Forms.Padding(4);
-            this.btnBasicSearch.Name = "btnBasicSearch";
-            this.btnBasicSearch.Size = new System.Drawing.Size(112, 34);
-            this.btnBasicSearch.TabIndex = 1;
-            this.btnBasicSearch.Text = "搜尋";
-            this.btnBasicSearch.UseVisualStyleBackColor = true;
-            this.btnBasicSearch.Click += new System.EventHandler(this.btnBasicSearch_Click);
+            this.btnClearInput.Location = new System.Drawing.Point(1158, 36);
+            this.btnClearInput.Margin = new System.Windows.Forms.Padding(4);
+            this.btnClearInput.Name = "btnClearInput";
+            this.btnClearInput.Size = new System.Drawing.Size(112, 34);
+            this.btnClearInput.TabIndex = 1;
+            this.btnClearInput.Text = "清除輸入";
+            this.btnClearInput.UseVisualStyleBackColor = true;
+            this.btnClearInput.Click += new System.EventHandler(this.btnClearInput_Click);
             // 
             // label2
             // 
@@ -598,7 +602,7 @@
             // 
             // btnComplex
             // 
-            this.btnComplex.Location = new System.Drawing.Point(1158, 123);
+            this.btnComplex.Location = new System.Drawing.Point(1158, 165);
             this.btnComplex.Margin = new System.Windows.Forms.Padding(4);
             this.btnComplex.Name = "btnComplex";
             this.btnComplex.Size = new System.Drawing.Size(112, 34);
@@ -656,17 +660,56 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "檢視資料表";
             // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.comboBox1);
+            this.groupBox5.Controls.Add(this.btnNested);
+            this.groupBox5.Location = new System.Drawing.Point(14, 95);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(274, 104);
+            this.groupBox5.TabIndex = 37;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "篩選查詢";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "所有車行(經銷商)賣出的車輛",
+            "所有沒賣出車的車行(經銷商)",
+            "所有重型機車的完整資料",
+            "所有輕型機車的完整資料",
+            "所有汽車的完整資料",
+            "所有只要繳牌照稅的車輛資料",
+            "所有機車的牌照稅資料"});
+            this.comboBox1.Location = new System.Drawing.Point(15, 26);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(246, 26);
+            this.comboBox1.TabIndex = 35;
+            // 
+            // btnNested
+            // 
+            this.btnNested.Location = new System.Drawing.Point(181, 60);
+            this.btnNested.Margin = new System.Windows.Forms.Padding(4);
+            this.btnNested.Name = "btnNested";
+            this.btnNested.Size = new System.Drawing.Size(80, 34);
+            this.btnNested.TabIndex = 34;
+            this.btnNested.Text = "搜尋";
+            this.btnNested.UseVisualStyleBackColor = true;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1282, 650);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btnComplex);
             this.Controls.Add(this.btnDelete);
-            this.Controls.Add(this.btnBasicSearch);
+            this.Controls.Add(this.btnClearInput);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnInsert);
             this.Controls.Add(this.btnUpdate);
@@ -689,6 +732,7 @@
             this.groupBox3.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -699,7 +743,7 @@
         private System.Windows.Forms.Button btnInsert;
         private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.Button btnUpdate;
-        private System.Windows.Forms.Button btnBasicSearch;
+        private System.Windows.Forms.Button btnClearInput;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DataGridView dataGridView1;
@@ -748,6 +792,9 @@
         private System.Windows.Forms.Button btnSubData;
         private System.Windows.Forms.ComboBox cbEntity;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button btnNested;
     }
 }
 
