@@ -29,11 +29,30 @@
         private void InitializeComponent()
         {
             this.btnEnter = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbInput = new System.Windows.Forms.TextBox();
+            this.rbMin = new System.Windows.Forms.RadioButton();
+            this.rbSum = new System.Windows.Forms.RadioButton();
+            this.rbMax = new System.Windows.Forms.RadioButton();
+            this.rbAvg = new System.Windows.Forms.RadioButton();
+            this.rbCnt = new System.Windows.Forms.RadioButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbAttri = new System.Windows.Forms.ComboBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.cbHavAttri = new System.Windows.Forms.ComboBox();
+            this.cbHaving = new System.Windows.Forms.CheckBox();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnEnter
             // 
-            this.btnEnter.Location = new System.Drawing.Point(494, 294);
+            this.btnEnter.Location = new System.Drawing.Point(423, 300);
             this.btnEnter.Margin = new System.Windows.Forms.Padding(4);
             this.btnEnter.Name = "btnEnter";
             this.btnEnter.Size = new System.Drawing.Size(112, 34);
@@ -42,12 +61,176 @@
             this.btnEnter.UseVisualStyleBackColor = true;
             this.btnEnter.Click += new System.EventHandler(this.btnEnter_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tbInput);
+            this.groupBox1.Location = new System.Drawing.Point(33, 200);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(508, 85);
+            this.groupBox1.TabIndex = 56;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "目前輸入";
+            // 
+            // tbInput
+            // 
+            this.tbInput.Enabled = false;
+            this.tbInput.Location = new System.Drawing.Point(87, 32);
+            this.tbInput.Name = "tbInput";
+            this.tbInput.Size = new System.Drawing.Size(323, 29);
+            this.tbInput.TabIndex = 0;
+            // 
+            // rbMin
+            // 
+            this.rbMin.AutoSize = true;
+            this.rbMin.Location = new System.Drawing.Point(25, 56);
+            this.rbMin.Name = "rbMin";
+            this.rbMin.Size = new System.Drawing.Size(105, 22);
+            this.rbMin.TabIndex = 57;
+            this.rbMin.TabStop = true;
+            this.rbMin.Text = "找最小值";
+            this.rbMin.UseVisualStyleBackColor = true;
+            this.rbMin.CheckedChanged += new System.EventHandler(this.rbMin_CheckedChanged);
+            // 
+            // rbSum
+            // 
+            this.rbSum.AutoSize = true;
+            this.rbSum.Location = new System.Drawing.Point(25, 112);
+            this.rbSum.Name = "rbSum";
+            this.rbSum.Size = new System.Drawing.Size(105, 22);
+            this.rbSum.TabIndex = 58;
+            this.rbSum.TabStop = true;
+            this.rbSum.Text = "計算總和";
+            this.rbSum.UseVisualStyleBackColor = true;
+            this.rbSum.CheckedChanged += new System.EventHandler(this.rbSum_CheckedChanged);
+            // 
+            // rbMax
+            // 
+            this.rbMax.AutoSize = true;
+            this.rbMax.Location = new System.Drawing.Point(25, 28);
+            this.rbMax.Name = "rbMax";
+            this.rbMax.Size = new System.Drawing.Size(105, 22);
+            this.rbMax.TabIndex = 59;
+            this.rbMax.TabStop = true;
+            this.rbMax.Text = "找最大值";
+            this.rbMax.UseVisualStyleBackColor = true;
+            this.rbMax.CheckedChanged += new System.EventHandler(this.rbMax_CheckedChanged);
+            // 
+            // rbAvg
+            // 
+            this.rbAvg.AutoSize = true;
+            this.rbAvg.Location = new System.Drawing.Point(25, 84);
+            this.rbAvg.Name = "rbAvg";
+            this.rbAvg.Size = new System.Drawing.Size(105, 22);
+            this.rbAvg.TabIndex = 60;
+            this.rbAvg.TabStop = true;
+            this.rbAvg.Text = "計算平均";
+            this.rbAvg.UseVisualStyleBackColor = true;
+            this.rbAvg.CheckedChanged += new System.EventHandler(this.rbAvg_CheckedChanged);
+            // 
+            // rbCnt
+            // 
+            this.rbCnt.AutoSize = true;
+            this.rbCnt.Location = new System.Drawing.Point(25, 140);
+            this.rbCnt.Name = "rbCnt";
+            this.rbCnt.Size = new System.Drawing.Size(105, 22);
+            this.rbCnt.TabIndex = 62;
+            this.rbCnt.TabStop = true;
+            this.rbCnt.Text = "計算個數";
+            this.rbCnt.UseVisualStyleBackColor = true;
+            this.rbCnt.CheckedChanged += new System.EventHandler(this.rbCnt_CheckedChanged);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.rbAvg);
+            this.groupBox2.Controls.Add(this.rbCnt);
+            this.groupBox2.Controls.Add(this.rbMin);
+            this.groupBox2.Controls.Add(this.rbSum);
+            this.groupBox2.Controls.Add(this.rbMax);
+            this.groupBox2.Location = new System.Drawing.Point(33, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(151, 175);
+            this.groupBox2.TabIndex = 63;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "第一步";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.cbAttri);
+            this.groupBox3.Location = new System.Drawing.Point(203, 12);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(338, 78);
+            this.groupBox3.TabIndex = 64;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "第二步";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(246, 36);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(0, 18);
+            this.label2.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(32, 36);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(44, 18);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "計算";
+            // 
+            // cbAttri
+            // 
+            this.cbAttri.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAttri.FormattingEnabled = true;
+            this.cbAttri.Location = new System.Drawing.Point(82, 33);
+            this.cbAttri.Name = "cbAttri";
+            this.cbAttri.Size = new System.Drawing.Size(158, 26);
+            this.cbAttri.TabIndex = 0;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.cbHavAttri);
+            this.groupBox4.Controls.Add(this.cbHaving);
+            this.groupBox4.Location = new System.Drawing.Point(203, 104);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(338, 83);
+            this.groupBox4.TabIndex = 65;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "第三步";
+            // 
+            // cbHavAttri
+            // 
+            this.cbHavAttri.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbHavAttri.FormattingEnabled = true;
+            this.cbHavAttri.Location = new System.Drawing.Point(142, 36);
+            this.cbHavAttri.Name = "cbHavAttri";
+            this.cbHavAttri.Size = new System.Drawing.Size(157, 26);
+            this.cbHavAttri.TabIndex = 1;
+            // 
+            // cbHaving
+            // 
+            this.cbHaving.AutoSize = true;
+            this.cbHaving.Location = new System.Drawing.Point(16, 40);
+            this.cbHaving.Name = "cbHaving";
+            this.cbHaving.Size = new System.Drawing.Size(124, 22);
+            this.cbHaving.TabIndex = 0;
+            this.cbHaving.Text = "分堆根據：";
+            this.cbHaving.UseVisualStyleBackColor = true;
+            // 
             // ComplexQuery
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(634, 351);
+            this.ClientSize = new System.Drawing.Size(562, 351);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnEnter);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -55,11 +238,34 @@
             this.Text = "ComplexQuery";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.ComplexQuery_Load);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.Button btnEnter;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton rbMin;
+        private System.Windows.Forms.RadioButton rbSum;
+        private System.Windows.Forms.RadioButton rbMax;
+        private System.Windows.Forms.RadioButton rbAvg;
+        private System.Windows.Forms.RadioButton rbCnt;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbAttri;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.ComboBox cbHavAttri;
+        private System.Windows.Forms.CheckBox cbHaving;
+        private System.Windows.Forms.TextBox tbInput;
     }
 }

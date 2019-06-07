@@ -36,5 +36,55 @@ namespace InsuranceDB
             Close();
         }
 
+        private void rbMax_CheckedChanged(object sender, EventArgs e)
+        {
+            if(rbMax.Checked == false)
+            {
+                return;
+            }
+
+            Console.WriteLine("MAX");
+        }
+
+        private void rbMin_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbMin.Checked == false)
+            {
+                return;
+            }
+
+            Console.WriteLine("MIN");
+
+        }
+
+        private void rbAvg_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbAvg.Checked == false)
+            {
+                return;
+            }
+
+            Console.WriteLine("AVG");
+        }
+
+        private void rbSum_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbSum.Checked == false)
+            {
+                return;
+            }
+
+            Console.WriteLine("SUM");
+        }
+
+        private void rbCnt_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbCnt.Checked == false)
+            {
+                return;
+            }
+
+            Console.WriteLine("COUNT");
+        }
     }
 }
