@@ -655,14 +655,11 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.cbMonth);
             this.groupBox5.Controls.Add(this.cbQuery);
             this.groupBox5.Controls.Add(this.btnSearch);
-            this.groupBox5.Controls.Add(this.label17);
-            this.groupBox5.Controls.Add(this.label18);
             this.groupBox5.Location = new System.Drawing.Point(14, 95);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(274, 148);
+            this.groupBox5.Size = new System.Drawing.Size(274, 104);
             this.groupBox5.TabIndex = 37;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "篩選查詢";
@@ -673,20 +670,18 @@
             this.cbQuery.FormattingEnabled = true;
             this.cbQuery.Items.AddRange(new object[] {
             "所有保單資料(不含經銷商)",
-            "所有沒賣出車的經銷商",
-            "所有只要繳燃料費的車輛資料",
-            "所有機車的牌照稅資料",
-            "所有要繳牌照稅的車輛資料",
-            "-"});
+            "資料庫中沒有賣出車的經銷商",
+            "只要繳燃料費的車輛資料",
+            "車輛廠牌是光陽的車主資料",
+            "不是在永康買的車輛資料"});
             this.cbQuery.Location = new System.Drawing.Point(14, 30);
             this.cbQuery.Name = "cbQuery";
             this.cbQuery.Size = new System.Drawing.Size(246, 26);
             this.cbQuery.TabIndex = 35;
-            this.cbQuery.SelectedIndexChanged += new System.EventHandler(this.cbQuery_SelectedIndexChanged);
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(181, 104);
+            this.btnSearch.Location = new System.Drawing.Point(177, 63);
             this.btnSearch.Margin = new System.Windows.Forms.Padding(4);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(80, 34);
@@ -711,9 +706,8 @@
             "9",
             "10",
             "11",
-            "12",
-            "-"});
-            this.cbMonth.Location = new System.Drawing.Point(51, 69);
+            "12"});
+            this.cbMonth.Location = new System.Drawing.Point(65, 208);
             this.cbMonth.Name = "cbMonth";
             this.cbMonth.Size = new System.Drawing.Size(46, 26);
             this.cbMonth.TabIndex = 36;
@@ -722,7 +716,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(8, 74);
+            this.label17.Location = new System.Drawing.Point(22, 213);
             this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(44, 18);
@@ -732,7 +726,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(97, 74);
+            this.label18.Location = new System.Drawing.Point(111, 213);
             this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(170, 18);
@@ -745,9 +739,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1282, 650);
+            this.Controls.Add(this.cbMonth);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.label17);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.label18);
             this.Controls.Add(this.btnComplex);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnClearInput);
@@ -774,8 +771,8 @@
             this.tabPage2.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

@@ -29,6 +29,11 @@ namespace InsuranceDB
         private void ComplexQuery_Load(object sender, EventArgs e)
         {
             cbOp.SelectedIndex = 0;
+
+            // only select COUNT to enable
+            tbVal.Enabled = false;
+            cbOp.Enabled = false;
+            cbHaving.Enabled = false;
         }
         
         private String getAggreEntity(String input)
@@ -51,7 +56,7 @@ namespace InsuranceDB
             {
                 msg += "請在第一步中選擇一項\n";
             }
-            if(cbAttri.SelectedItem.ToString() == "")
+            if(cbAttri.SelectedItem == null)
             {
                 msg += "請在第二步中選擇要計算的屬性\n";
             }
@@ -191,6 +196,9 @@ namespace InsuranceDB
         {
             if (rbCnt.Checked == false)
             {
+                cbHaving.Enabled = false;
+                cbOp.Enabled = false;
+                tbVal.Enabled = false;
                 return;
             }
 
@@ -199,6 +207,11 @@ namespace InsuranceDB
             cbAttri.Items.Clear();
             cbAttri.Items.Add("全部");            // COUNT(*)
             cbAttri.SelectedIndex = 0;
+
+            cbHaving.Enabled = true;
+            cbOp.Enabled = true;
+            tbVal.Enabled = true;
+
         }
 
         private void cbGroupBy_CheckedChanged(object sender, EventArgs e)
@@ -216,13 +229,5 @@ namespace InsuranceDB
 
         }
 
-        private void cbHaving_CheckedChanged(object sender, EventArgs e)
-        {
-            if(!curAggre.Equals(Aggregate.COUNT))
-            {
-                cbHaving.Checked = false;
-                MessageBox.Show("只有選擇計算個數才能勾選此選項！", "WARNING");
-            }
-        }
     }
 }

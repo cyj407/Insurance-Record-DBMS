@@ -62,8 +62,6 @@ namespace InsuranceDB
             cbEntity.SelectedIndex = 6;
             dtDate.MinDate = DateTime.Today;
             dtDate.Value = DateTime.Today;
-            cbQuery.SelectedIndex = 5;
-            cbMonth.SelectedIndex = 12;
         }
         
         private void loadAllData(String query)
@@ -73,6 +71,7 @@ namespace InsuranceDB
             {
                 query = "SELECT * FROM OWNER, VEHICLE, WARRANTY, FEE, DEALER, INSURE ";
                 query += " WHERE OWNER.OID = INSURE.OwnerID AND ";
+                query += " VEHICLE.車主 = OWNER.OID AND ";
                 query += " VEHICLE.車牌號碼 = INSURE.License AND ";
                 query += "VEHICLE.FeeID = FEE.FID AND ";
                 query += " DEALER.車行 = VEHICLE.經銷商 AND ";
@@ -239,13 +238,45 @@ namespace InsuranceDB
             long fuel_fee = long.Parse(tbFeeFuel.Text);
             long lic_tax = long.Parse(tbTaxLic.Text);
 
-            // insert to all entity and relationship // fee no needs to add
-            _owner.insert(owner_n, owner_g, owner_a);
-            _vehicle.insert(vehicle_t, vehicle_l, vehicle_b, dealer_n, curFee_id);
-            _warranty.insert(warranty_t, warranty_d, warranty_p, warranty_c, warranty_pay);
-            _dealer.insert(dealer_n, dealer_a, dealer_p);
-            _insure.insert(_owner.getID(), vehicle_l, _warranty.getID());
+            // check not duplicate
+            bool exists = false;
+            String query = " SELECT * FROM OWNER, VEHICLE, WARRANTY, INSURE ";
+            query += " WHERE OID=OwnerID AND 車牌號碼=License AND 車主=OID AND WID=WarrantyID AND";
+            query += string.Format(
+                " 保險種類='{0}' AND 姓名='{1}' AND 性別='{2}' AND 地址='{3}' AND 車牌號碼='{4}' "
+                , warranty_t, owner_n, owner_g, owner_a, vehicle_l);
+
+            Console.WriteLine(query);
+            
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            connection.Open();
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Console.WriteLine("exists");
+                    exists = true;
+                    break;
+                }
+            }
+            cmd.ExecuteNonQuery();
+            connection.Close();
+
+            if(exists)
+            {
+                MessageBox.Show("此資料已存在，無法再次加入。", "WARNING");
+            }
+            else {
+                
+                // insert to all entity and relationship // fee no needs to add
+                _owner.insert(owner_n, owner_g, owner_a);
+                _vehicle.insert(vehicle_t, vehicle_l, vehicle_b, dealer_n, curFee_id, _owner.getID());
+                _warranty.insert(warranty_t, warranty_d, warranty_p, warranty_c, warranty_pay);
+                _dealer.insert(dealer_n, dealer_a, dealer_p);
+                _insure.insert(_owner.getID(), vehicle_l, _warranty.getID());
  
+            }
+
             loadAllData("");
             clearInput();
         }
@@ -285,10 +316,11 @@ namespace InsuranceDB
             loadAllData(query);
 
             curTable = entity;
-            if(curTable == "")
+            if( !((curTable == "FEE" || curTable == "DEALER") && canDelete))
             {
-                canDelete = true;
+                canDelete = false;
             }
+
         }
 
         private void btnClearInput_Click(object sender, EventArgs e)
@@ -332,7 +364,7 @@ namespace InsuranceDB
             long lic_tax = long.Parse(tbTaxLic.Text);
 
             _owner.update(owner_n, owner_g, owner_a, curOwner_id);
-            _vehicle.update(vehicle_t, vehicle_l, vehicle_b, dealer_n, curFee_id);
+            _vehicle.update(vehicle_t, vehicle_l, vehicle_b, dealer_n, curFee_id, curOwner_id);
             _warranty.update(warranty_t, warranty_d, warranty_p, warranty_c, warranty_pay, curWarrant_id);
             _dealer.update(dealer_n, dealer_a, dealer_p);
 
@@ -345,6 +377,7 @@ namespace InsuranceDB
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
+            // bug when warranty table can be delete
             if(!canDelete)
             {
                 MessageBox.Show("無法進行刪除！", "WARNING"); 
@@ -374,28 +407,6 @@ namespace InsuranceDB
         private void btnSearch_Click(object sender, EventArgs e)
         {
             String query = "";
-            if(cbMonth.SelectedItem.ToString() == "-" && cbQuery.SelectedItem.ToString() == "-")
-            {
-                MessageBox.Show("請選取一個下拉選單中的選項", "WARNING");
-                return;
-            }
-
-            // Check the month query first
-            if(cbMonth.SelectedItem.ToString() != "-")
-            {
-                String year = DateTime.Now.Year.ToString();
-                String month = cbMonth.SelectedItem.ToString();
-                DateTime firstDay = DateTime.Parse(year + "-" + month + "-1");
-                DateTime lastDay = firstDay.AddMonths(1).AddDays(-1);
-
-                query = "SELECT * FROM OWNER, VEHICLE, WARRANTY, FEE, DEALER, INSURE ";
-                query += " WHERE OWNER.OID = INSURE.OwnerID AND ";
-                query += " VEHICLE.車牌號碼 = INSURE.License AND ";
-                query += "VEHICLE.FeeID = FEE.FID AND ";
-                query += " DEALER.車行 = VEHICLE.經銷商 AND ";
-                query += " WARRANTY.WID = INSURE.WarrantyID AND ";
-                query += string.Format(" WARRANTY.保險到期日 between '{0}' AND '{1}'", firstDay, lastDay);
-            }
 
             switch(cbQuery.SelectedIndex)
             {
@@ -403,7 +414,8 @@ namespace InsuranceDB
                     query += " SELECT OWNER.*, WARRANTY.*, FEE.*,";
                     query += " VEHICLE.車牌號碼, VEHICLE.車種, VEHICLE.廠牌";
                     query += " FROM OWNER, WARRANTY, VEHICLE, FEE, INSURE";
-                    query += " WHERE OWNER.OID = INSURE.OwnerID";
+                    query += " WHERE OWNER.OID = INSURE.OwnerID ";
+                    query += " AND OWNER.OID = VEHICLE.車主 ";
                     query += " AND WARRANTY.WID = INSURE.WarrantyID";
                     query += " AND VEHICLE.車牌號碼 = INSURE.License";
                     query += " AND FEE.FID = VEHICLE.FeeID";
@@ -418,19 +430,19 @@ namespace InsuranceDB
                 case(2):
                     query += " SELECT * FROM VEHICLE";
                     query += " WHERE EXISTS ( SELECT * FROM FEE WHERE ";
-                    query += " FEE.FID = VEHICLE.FeeID AND FEE.燃料費 )";
+                    query += " FEE.FID = VEHICLE.FeeID AND FEE.牌照稅=0)";
                     break;
 
                 case(3):
-                    query += " SELECT FEE.牌照稅 FROM FEE ";
-                    query += " WHERE FEE.FID IN ( SELECT VEHICLE.FeeID FROM VEHICLE ";
-                    query += " WHERE VEHICLE.車種 = '重型機車' OR VEHICLE.車種 = '輕型機車' )";
+                    query += " SELECT * FROM OWNER ";
+                    query += " WHERE OWNER.OID IN ( SELECT VEHICLE.車主 FROM VEHICLE ";
+                    query += " WHERE VEHICLE.廠牌='光陽' )";
                     break;
 
                 case(4):
                     query += " SELECT * FROM VEHICLE ";
-                    query += " WHERE VEHICLE.FeeID NOT IN ( SELECT FEE.FID FROM FEE ";
-                    query += " WHERE FEE.牌照稅=0 ) ";
+                    query += " WHERE VEHICLE.經銷商 NOT IN ( SELECT DEALER.車行 FROM DEALER ";
+                    query += " WHERE DEALER.車行地址 LIKE '%永康區%' ) ";
                     break;
 
                 default:        // "-" -> search month
@@ -447,12 +459,23 @@ namespace InsuranceDB
 
         private void cbMonth_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cbQuery.SelectedIndex = 5;
-        }
+            String year = DateTime.Now.Year.ToString();
+            String month = cbMonth.SelectedItem.ToString();
+            DateTime firstDay = DateTime.Parse(year + "-" + month + "-1");
+            DateTime lastDay = firstDay.AddMonths(1).AddDays(-1);
+            String query = "";
 
-        private void cbQuery_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            cbMonth.SelectedIndex = 12;
+            query = "SELECT * FROM OWNER, VEHICLE, WARRANTY, FEE, DEALER, INSURE ";
+            query += " WHERE OWNER.OID = INSURE.OwnerID AND ";
+            query += " VEHICLE.車主 = OWNER.OID AND ";
+            query += " VEHICLE.車牌號碼 = INSURE.License AND ";
+            query += "VEHICLE.FeeID = FEE.FID AND ";
+            query += " DEALER.車行 = VEHICLE.經銷商 AND ";
+            query += " WARRANTY.WID = INSURE.WarrantyID AND ";
+            query += string.Format(" WARRANTY.保險到期日 between '{0}' AND '{1}'", firstDay, lastDay);
+
+            loadAllData(query);
+            
         }
 
         private void btnEnter_Click(object sender, EventArgs e)

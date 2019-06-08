@@ -250,7 +250,6 @@
             this.cbHaving.TabIndex = 2;
             this.cbHaving.Text = "計算個數的限制條件：結果";
             this.cbHaving.UseVisualStyleBackColor = true;
-            this.cbHaving.CheckedChanged += new System.EventHandler(this.cbHaving_CheckedChanged);
             // 
             // ComplexQuery
             // 
