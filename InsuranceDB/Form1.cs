@@ -34,9 +34,6 @@ namespace InsuranceDB
         private String curLicen, curDealer;
         
         private String curTable;
-        
-        private bool canUpdate = false;
-        private bool canDelete = false;
 
         public MainWindow()
         {
@@ -62,6 +59,8 @@ namespace InsuranceDB
             cbEntity.SelectedIndex = 6;
             dtDate.MinDate = DateTime.Today;
             dtDate.Value = DateTime.Today;
+            btnDelete.Enabled = false;
+            btnUpdate.Enabled = false;
         }
         
         private void loadAllData(String query)
@@ -69,6 +68,10 @@ namespace InsuranceDB
             // show the updated data
             if(query == "")
             {
+                Console.WriteLine("FULL DATA");
+                
+                btnDelete.Enabled = true;
+
                 query = "SELECT * FROM OWNER, VEHICLE, WARRANTY, FEE, DEALER, INSURE ";
                 query += " WHERE OWNER.OID = INSURE.OwnerID AND ";
                 query += " VEHICLE.車主 = OWNER.OID AND ";
@@ -77,41 +80,54 @@ namespace InsuranceDB
                 query += " DEALER.車行 = VEHICLE.經銷商 AND ";
                 query += " WARRANTY.WID = INSURE.WarrantyID";
             }
+            else {
+                
+                Console.WriteLine("QUERY DATA");
 
-            Console.WriteLine(query);
+                btnDelete.Enabled = false;
+            }
+
 
             MySqlCommand cmd = new MySqlCommand(query, connection);
-            connection.Open();
-            DataTable dt = new DataTable();
-            MySqlDataAdapter da = new MySqlDataAdapter(cmd);
-            da.Fill(dt);
-            BindingSource bs = new BindingSource();
-            bs.DataSource = dt;
-            dataGridView1.DataSource = bs;
-            
-            if(dataGridView1.Columns["經銷商"] != null && dataGridView1.Columns["車行"] != null)
-            {
-                dataGridView1.Columns["經銷商"].Visible = false;
-            }
-            if (dataGridView1.Columns["FeeID"] != null && dataGridView1.Columns["FID"] != null)
-            {
-                dataGridView1.Columns["FID"].Visible = false;
-            }
-            if (dataGridView1.Columns["OwnerID"] != null && dataGridView1.Columns["OID"] != null)
-            {
-                dataGridView1.Columns["OID"].Visible = false;
-            }
-            if (dataGridView1.Columns["License"] != null && dataGridView1.Columns["車牌號碼"] != null)
-            {
-                dataGridView1.Columns["License"].Visible = false;
-            }
-            if (dataGridView1.Columns["WarrantyID"] != null && dataGridView1.Columns["WID"] != null)
-            {
-                dataGridView1.Columns["WID"].Visible = false;
-            }
 
-            da.Update(dt);
-            connection.Close();
+            try {
+                connection.Open();
+                DataTable dt = new DataTable();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                BindingSource bs = new BindingSource();
+                bs.DataSource = dt;
+                dataGridView1.DataSource = bs;
+            
+                if(dataGridView1.Columns["經銷商"] != null && dataGridView1.Columns["車行"] != null)
+                {
+                    dataGridView1.Columns["經銷商"].Visible = false;
+                }
+                if (dataGridView1.Columns["FeeID"] != null && dataGridView1.Columns["FID"] != null)
+                {
+                    dataGridView1.Columns["FID"].Visible = false;
+                }
+                if (dataGridView1.Columns["OwnerID"] != null && dataGridView1.Columns["OID"] != null)
+                {
+                    dataGridView1.Columns["OID"].Visible = false;
+                }
+                if (dataGridView1.Columns["License"] != null && dataGridView1.Columns["車牌號碼"] != null)
+                {
+                    //dataGridView1.Columns["License"].Visible = false;
+                }
+                if (dataGridView1.Columns["WarrantyID"] != null && dataGridView1.Columns["WID"] != null)
+                {
+                    dataGridView1.Columns["WID"].Visible = false;
+                }
+
+                da.Update(dt);
+                connection.Close();
+
+            }
+            catch
+            {
+                MessageBox.Show("SQL 語法錯誤！\n");
+            }
         }
 
         private bool completeData() 
@@ -246,7 +262,7 @@ namespace InsuranceDB
                 " 保險種類='{0}' AND 姓名='{1}' AND 性別='{2}' AND 地址='{3}' AND 車牌號碼='{4}' "
                 , warranty_t, owner_n, owner_g, owner_a, vehicle_l);
 
-            Console.WriteLine(query);
+            // Console.WriteLine(query);
             
             MySqlCommand cmd = new MySqlCommand(query, connection);
             connection.Open();
@@ -254,7 +270,6 @@ namespace InsuranceDB
             {
                 while (reader.Read())
                 {
-                    Console.WriteLine("exists");
                     exists = true;
                     break;
                 }
@@ -311,36 +326,40 @@ namespace InsuranceDB
         private void btnSubData_Click(object sender, EventArgs e)
         {
             String entity = getQueryEntity(cbEntity.SelectedItem.ToString());
-            Console.WriteLine(entity);
+            // Console.WriteLine(entity);
             String query = (entity == "") ? "" : ("SELECT * FROM " + entity);
             loadAllData(query);
 
             curTable = entity;
-            if( !((curTable == "FEE" || curTable == "DEALER") && canDelete))
-            {
-                canDelete = false;
-            }
+
+            // if(cbEntity.SelectedItem.ToString() != "全部資料")
+            // {
+                // btnDelete.Enabled = false;
+                // btnUpdate.Enabled = false;
+            // }
+            // if( !((curTable == "FEE" || curTable == "DEALER") && canDelete))
+            // {
+            //     canDelete = false;
+            // }
 
         }
 
         private void btnClearInput_Click(object sender, EventArgs e)
         {
             clearInput();
-            canUpdate = false;
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             
             // Check have data to modify now
-            if(!canUpdate)
-            {
-                MessageBox.Show("無法進行更改！", "WARNING"); 
-                MessageBox.Show(
-                    "請先選擇左方「檢視資料表」的「全部資料」後按「顯示」。\n再從下方的資料中對要更改的資料點兩下在「插入/更新」的白框中進行更改。"
-                    ,"WARNING");
-                return;
-            }
+            // if(!canUpdate)
+            // { 
+            //     MessageBox.Show(
+            //         "請先選擇左方「檢視資料表」的「全部資料」後按「顯示」。\n再從下方的資料中對要更改的資料點兩下在「插入/更新」的白框中進行更改。"
+            //         ,"WARNING");
+            //     return;
+            // }
 
             if(!completeData()) {
                 return;
@@ -372,36 +391,75 @@ namespace InsuranceDB
             loadAllData("");
             clearInput();
 
-            canUpdate = false;
+            // canUpdate = false;
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
-        {
-            // bug when warranty table can be delete
-            if(!canDelete)
-            {
-                MessageBox.Show("無法進行刪除！", "WARNING"); 
-                MessageBox.Show(
-                    "請先選擇左方「檢視資料表」的「全部資料」後按「顯示」。\n再從下方的資料中選取要刪除的資料後點擊刪除。"
-                    ,"WARNING");
-                return;
-            }
-
+        {   
             foreach (DataGridViewRow data in dataGridView1.SelectedRows)
             {
+                // get current row
                 curOwner_id = long.Parse(data.Cells["OID"].Value.ToString());
                 curLicen = data.Cells["車牌號碼"].Value.ToString();
                 curWarrant_id = long.Parse(data.Cells["WID"].Value.ToString());
 
-                // delete data
-                _owner.delete(curOwner_id);
-                _vehicle.delete(curLicen);
+                // check delete owner or not
+                bool deleteOwner = true;
+                String query = String.Format(
+                    "SELECT COUNT(*) FROM INSURE WHERE OwnerID='{0}'", curOwner_id);
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                connection.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if(int.Parse(reader["COUNT(*)"].ToString()) > 1)
+                        {
+                            deleteOwner = false;
+                            break;
+                        }
+                    }
+                }
+                cmd.ExecuteNonQuery();
+                connection.Close();
+
+                // check delete vehicle or not
+                bool deleteVeh = true;
+                query = String.Format(
+                    "SELECT COUNT(*) FROM INSURE WHERE License='{0}'", curLicen);
+                cmd = new MySqlCommand(query, connection);
+                connection.Open();
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if(int.Parse(reader["COUNT(*)"].ToString()) > 1)
+                        {
+                            deleteVeh = false;
+                            break;
+                        }
+                    }
+                }
+                cmd.ExecuteNonQuery();
+                connection.Close();
+
+                if(deleteOwner) {
+                    Console.WriteLine("delete owner");
+                    _owner.delete(curOwner_id);
+                }
+                if(deleteVeh) {
+                    Console.WriteLine("delete vehicle");
+                    _vehicle.delete(curLicen);
+                }
                 _warranty.delete(curWarrant_id);
             }
 
+            // finish delete and turn off the button
+            btnDelete.Enabled = false;
+
             // show the updated data
             loadAllData("");
-            canDelete = false;
+         
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -496,32 +554,35 @@ namespace InsuranceDB
         private void dataGridView1_SelectionChanged(object sender, EventArgs e) 
         {
 
-            if(curTable == "FEE" && dataGridView1.ColumnCount == 3 && canUpdate)
-            {
-                curFee_id = (getValue("FID") == "") ? curFee_id : long.Parse(getValue("FID"));        
-                tbFeeFuel.Text = (getValue("燃料費") == "") ? tbFeeFuel.Text : getValue("燃料費");
-                tbTaxLic.Text = (getValue("牌照稅") == "") ? tbTaxLic.Text : getValue("牌照稅");
-                return;
-            }
-            if(curTable == "DEALER" && dataGridView1.ColumnCount == 3 && canUpdate)
-            {
-                curDealer = (getValue("車行") == "") ? curDealer : getValue("車行");
-                tbDealer.Text = (getValue("車行")=="") ? tbDealer.Text : getValue("車行");
-                tbDealerAddr.Text = (getValue("車行地址") == "") ? tbDealerAddr.Text : getValue("車行地址");
-                tbPhone.Text = (getValue("電話") == "") ? tbPhone.Text : getValue("電話");
-                return;
-            }
+            // if(curTable == "FEE" && dataGridView1.ColumnCount == 3 && canUpdate)
+            // {
+            //     curFee_id = (getValue("FID") == "") ? curFee_id : long.Parse(getValue("FID"));        
+            //     tbFeeFuel.Text = (getValue("燃料費") == "") ? tbFeeFuel.Text : getValue("燃料費");
+            //     tbTaxLic.Text = (getValue("牌照稅") == "") ? tbTaxLic.Text : getValue("牌照稅");
+            //     return;
+            // }
+            // if(curTable == "DEALER" && dataGridView1.ColumnCount == 3 && canUpdate)
+            // {
+            //     curDealer = (getValue("車行") == "") ? curDealer : getValue("車行");
+            //     tbDealer.Text = (getValue("車行")=="") ? tbDealer.Text : getValue("車行");
+            //     tbDealerAddr.Text = (getValue("車行地址") == "") ? tbDealerAddr.Text : getValue("車行地址");
+            //     tbPhone.Text = (getValue("電話") == "") ? tbPhone.Text : getValue("電話");
+            //     return;
+            // }
 
             // check show the "全部資料" table
-            if(curTable == "" && getValue("OID") != "" && getValue("車牌號碼") != "" &&
-             getValue("車行") != "" && getValue("WID") != "" && getValue("FID") != "")
+            if(curTable == "" && getValue("OID") != "" && getValue("車牌號碼") != "" && 
+                getValue("車行") != "" && getValue("WID") != "" &&
+                getValue("FID") != "" && dataGridView1.ColumnCount == 25)
             {
-                Console.WriteLine("CURRENT TABLE : " + curTable);
-                canUpdate = true;
+                Console.WriteLine("correct table");
+                // canUpdate = true;
+                // btnUpdate.Enabled = true;
+                // btnDelete.Enabled = true;
             }
-            else {
-                canUpdate = false;
-            }
+            // else {
+                // canUpdate = false;
+            // }
 
             // save the invisible data (ex: OwnerID, InsuranceID... )
             curOwner_id = (getValue("OID") == "") ? curOwner_id : long.Parse(getValue("OID"));
@@ -529,7 +590,7 @@ namespace InsuranceDB
             curDealer = (getValue("車行") == "") ? curDealer : getValue("車行");
             curWarrant_id = (getValue("WID") == "") ? curWarrant_id : long.Parse(getValue("WID"));
             curFee_id = (getValue("FID") == "") ? curFee_id : long.Parse(getValue("FID"));
-            Console.WriteLine("current fee id : " +curFee_id);
+            // Console.WriteLine("current fee id : " +curFee_id);
 
             // save the visible data and put in the input frame
             tbName.Text = (getValue("姓名") == "") ? tbName.Text : getValue("姓名");
